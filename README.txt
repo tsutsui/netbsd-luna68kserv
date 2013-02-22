@@ -39,15 +39,15 @@ file system which has all release binaries including X server and clients.
 5) boot LUNA via Ethernet from the monitor prompt:
 ---
 >k
-ctlr: dk et
+ctlr: dk  et
 host: omron
 sver: servername
-fnam: omron:vmunix luna68kserv:boot
+fnam: omron:vmunix  luna68kserv:boot
 >g
-text(66196)+data(0)+bss(21796)
+text(71800)+data(0)+bss(21912) 
 >x
  
->> NetBSD/luna68k boot, Revision 1.2 (Tue Jan 15 00:59:19 JST 2013)
+>> NetBSD/luna68k boot, Revision 1.4 (Fri Feb 22 20:43:41 JST 2013)
 >> (based on Stinger ver 0.0 [Phase-31])
 
  :

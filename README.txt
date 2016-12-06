@@ -44,10 +44,10 @@ host: omron
 sver: servername
 fnam: omron:vmunix  luna68kserv:boot
 >g
-text(71800)+data(0)+bss(21912) 
+text(79240)+data(0)+bss(17952) 
 >x
  
->> NetBSD/luna68k boot, Revision 1.4 (Fri Feb 22 20:43:41 JST 2013)
+>> NetBSD/luna68k boot, Revision 1.10
 >> (based on Stinger ver 0.0 [Phase-31])
 
  :

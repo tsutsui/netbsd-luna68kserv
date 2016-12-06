@@ -1,6 +1,7 @@
 #! /bin/sh
 #
-# Copyright (c) 2009, 2010, 2012, 2013 Izumi Tsutsui.  All rights reserved.
+# Copyright (c) 2009, 2010, 2012, 2013, 2016 Izumi Tsutsui.
+# All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions
@@ -22,7 +23,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 # THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-VERSION=20130222
+VERSION=20161207
 SERVERNAME=luna68kserv
 CLIENTNAME=lunachild
 
@@ -99,18 +100,18 @@ fi
 if [ ! -d ${TOOLDIR} ]; then
 	echo 'set TOOLDIR first'; exit 1
 fi
-if [ ! -x ${TOOLDIR}/bin/nbdisklabel-${MACHINE} ]; then
-	echo 'build tools first'; exit 1
+if [ ! -x ${TOOLDIR}/bin/nbmake-${MACHINE} ]; then
+	echo 'build tools in ${TOOLDIR} first'; exit 1
 fi
 
 #
 # info about ftp to get binary sets
 #
 #FTPHOST=ftp.NetBSD.org
-FTPHOST=ftp.jp.NetBSD.org
-#FTPHOST=ftp7.jp.NetBSD.org
+#FTPHOST=ftp.jp.NetBSD.org
+FTPHOST=ftp7.jp.NetBSD.org
 #FTPHOST=nyftp.NetBSD.org
-RELEASE=6.0.1
+RELEASE=7.0.2
 RELEASEDIR=pub/NetBSD/NetBSD-${RELEASE}
 #RELEASEDIR=pub/NetBSD-daily/HEAD/201011130000Z
 
@@ -121,12 +122,13 @@ CAT=cat
 CKSUM=cksum
 CP=cp
 DD=dd
-DISKLABEL=${TOOLDIR}/bin/nbdisklabel-${MACHINE}
+DISKLABEL=${TOOLDIR}/bin/nbdisklabel
 FDISK=${TOOLDIR}/bin/${MACHINE_GNU_PLATFORM}-fdisk
 FTP=ftp
 #FTP=lukemftp
 FTP_OPTIONS=-V
-GZIP=gzip
+#GZIP=gzip
+GZIP=pigz
 MKDIR=mkdir
 MV=mv
 RM=rm
@@ -182,7 +184,7 @@ MBRNETBSD=169
 
 # makefs(8) parameters
 BLOCKSIZE=16384
-FRAGSIZE=2048
+FRAGSIZE=4096
 DENSITY=8192
 
 #
@@ -277,7 +279,7 @@ rpcbind=YES		rpcbind_flags="-l"	# -l logs libwrap
 mountd=YES		mountd_flags=""		# NFS mount requests daemon
 nfs_client=NO					# enable client daemons
 nfs_server=YES					# enable server daemons
-			nfsd_flags="-6tun 4"
+			nfsd_flags=""
 dhcpd=YES		dhcpd_flags="-q"
 isibootd=YES
 savecore=NO
@@ -411,9 +413,9 @@ ${CP} ${WORKDIR}/resolv.conf ${TARGETROOTDIR}/${NFSROOT}/etc
 
 # /var/db/dhcpd.leases is created by makefs(8) via specfile
 
-# bootloader XXX temporarily copied from NetBSD/luna68k -current
+# bootloader
 ${MKDIR} ${TARGETROOTDIR}/tftpboot
-${CP} boot ${TARGETROOTDIR}/tftpboot
+${CP} ${TARGETROOTDIR}/${NFSROOT}/usr/mdec/boot ${TARGETROOTDIR}/tftpboot
 
 echo Preparing swap file...
 # empty 128MB
@@ -539,7 +541,7 @@ c:    ${BSDPARTSECTORS} ${FSOFFSET} unused 0 0
 d:    ${IMAGESECTORS} 0 unused 0 0
 EOF
 
-${DISKLABEL} -R -F ${IMAGE} ${WORKDIR}/labelproto
+${DISKLABEL} -R -F -M ${MACHINE} ${IMAGE} ${WORKDIR}/labelproto
 
 echo Creating gzipped image...
 ${GZIP} -9c ${WORKDIR}/${MACHINE}.img > ${WORKDIR}/${SERVERNAME}-${VERSION}.img.gz.tmp

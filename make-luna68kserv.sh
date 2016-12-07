@@ -279,7 +279,6 @@ rpcbind=YES		rpcbind_flags="-l"	# -l logs libwrap
 mountd=YES		mountd_flags=""		# NFS mount requests daemon
 nfs_client=NO					# enable client daemons
 nfs_server=YES					# enable server daemons
-			nfsd_flags=""
 dhcpd=YES		dhcpd_flags="-q"
 isibootd=YES
 savecore=NO
@@ -298,7 +297,6 @@ dhclient=NO
 nfs_client=YES
 inetd=YES
 
-fixsb=NO
 savecore=NO
 cron=NO
 postfix=NO

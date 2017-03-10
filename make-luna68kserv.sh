@@ -26,6 +26,9 @@
 VERSION=20170310
 SERVERNAME=luna68kserv
 CLIENTNAME=lunachild
+DISKNAME=luna68kserv
+
+EXPANDFS_SH=expand-image-fssize.sh
 
 #MACHINE=amd64
 MACHINE=i386
@@ -476,6 +479,17 @@ EOF
 
 ${CAT} ${WORKDIR}/spec.${MACHINE} ${WORKDIR}/spec.luna68k > ${WORKDIR}/spec
 
+echo Preparing ${EXPANDFS_SH} script...
+${SED}  -e "s/@@BOOTDISK@@/${BOOTDISK}/"                        \
+	-e "s/@@DISKNAME@@/${DISKNAME}/"                        \
+	-e "s/@@MBRNETBSD@@/${MBRNETBSD}/"                      \
+	-e "s/@@IMAGEMB@@/${IMAGEMB}/"                          \
+	-e "s/@@SWAPMB@@/${SWAPMB}/"                            \
+	-e "s/@@HEADS@@/${HEADS}/"                              \
+	-e "s/@@SECTORS@@/${SECTORS}/"                          \
+	< ./${EXPANDFS_SH}.in > ${TARGETROOTDIR}/${EXPANDFS_SH}
+echo ./${EXPANDFS_SH}   type=file mode=755 >> ${WORKDIR}/spec
+
 echo Creating rootfs...
 ${TOOLDIR}/bin/nbmakefs -M ${FSSIZE} -B ${TARGET_ENDIAN} \
 	-F ${WORKDIR}/spec -N ${TARGETROOTDIR}/etc \
@@ -514,7 +528,7 @@ fi
 echo Creating disklabel...
 ${CAT} > ${WORKDIR}/labelproto <<EOF
 type: ESDI
-disk: image
+disk: ${DISKNAME}
 label: 
 flags:
 bytes/sector: 512

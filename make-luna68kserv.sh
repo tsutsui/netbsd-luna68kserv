@@ -25,7 +25,7 @@
 
 VERSION=20170310
 SERVERNAME=luna68kserv
-CLIENTNAME=lunachild
+CLIENTNAME=luna68k
 DISKNAME=luna68kserv
 
 EXPANDFS_SH=expand-image-fssize.sh
@@ -296,6 +296,7 @@ ${CAT} ${TARGETROOTDIR}/${NFSROOT}/etc/rc.conf | \
 	${SED} -e 's/rc_configured=NO/rc_configured=YES/' > \
 	${WORKDIR}/${NFSROOT}/rc.conf
 ${CAT} >> ${WORKDIR}/${NFSROOT}/rc.conf <<EOF
+hostname=${CLIENTNAME}
 dhclient=NO
 nfs_client=YES
 inetd=YES
